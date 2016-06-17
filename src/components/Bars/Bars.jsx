@@ -22,7 +22,6 @@ const {
 	object,
 	bool,
 	string,
-	oneOfType,
 } = React.PropTypes;
 
 /**
@@ -90,7 +89,10 @@ const Bars = createClass({
 		 * - `PALETTE_MONOCHROME_4_5`
 		 * - `PALETTE_MONOCHROME_5_5`
 		 *
-		 * Alternatively you can pass in an object if you want to map fields to
+		 */
+		palette: arrayOf(string),
+		/**
+		 * You can pass in an object if you want to map fields to
 		 * `lucid.chartConstants` or custom colors:
 		 *
 		 *     {
@@ -98,12 +100,9 @@ const Bars = createClass({
 		 *       'rev': COLOR_3,
 		 *       'clicks': '#abc123',
 		 *     }
-		 *
 		 */
-		palette: oneOfType([
-			arrayOf(string),
-			object,
-		]),
+		colorMap: object,
+
 
 		/**
 		 * The scale for the x axis. This must be a d3-scale scale.
@@ -175,6 +174,8 @@ const Bars = createClass({
 			legend,
 			hasToolTips,
 			palette,
+			colorMap,
+			colorOffset,
 			xScale,
 			xField,
 			xFormatter,
@@ -189,8 +190,6 @@ const Bars = createClass({
 			isHovering,
 			hoveringSeriesIndex,
 		} = this.state;
-
-		const hasPalette = _.isArray(palette);
 
 		// This scale is used for grouped bars
 		const innerXScale = d3Scale.scaleBand()
@@ -234,10 +233,7 @@ const Bars = createClass({
 								y={yScale(end)}
 								height={yScale(start) - yScale(end)}
 								width={isStacked ? xScale.bandwidth() : innerXScale.bandwidth() }
-								color={hasPalette
-									? palette[pointsIndex % palette.length]
-									: palette[yFields[pointsIndex]]
-								}
+								color={_.get(colorMap, yFields[pointsIndex], palette[(pointsIndex % palette.length) + colorOffset])}
 							/>
 						))}
 
