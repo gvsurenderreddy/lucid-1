@@ -25,6 +25,7 @@ const {
 	string,
 	array,
 	bool,
+	oneOfType,
 } = React.PropTypes;
 
 /**
@@ -90,6 +91,33 @@ const BarChart = createClass({
 		 * Show a legend at the bottom of the chart.
 		 */
 		hasLegend: bool,
+		/**
+		 * Takes one of the palettes exported from `lucid.chartConstants`.
+		 * Available palettes:
+		 *
+		 * - `PALETTE_6` (default)
+		 * - `PALETTE_30`
+		 * - `PALETTE_MONOCHROME_0_5`
+		 * - `PALETTE_MONOCHROME_1_5`
+		 * - `PALETTE_MONOCHROME_2_5`
+		 * - `PALETTE_MONOCHROME_3_5`
+		 * - `PALETTE_MONOCHROME_4_5`
+		 * - `PALETTE_MONOCHROME_5_5`
+		 *
+		 * Alternatively you can pass in an object if you want to map fields to
+		 * `lucid.chartConstants` or custom colors:
+		 *
+		 *     {
+		 *       'imps': COLOR_0,
+		 *       'rev': COLOR_3,
+		 *       'clicks': '#abc123',
+		 *     }
+		 *
+		 */
+		palette: oneOfType([
+			arrayOf(string),
+			object,
+		]),
 
 
 		/**
@@ -120,7 +148,8 @@ const BarChart = createClass({
 
 		/**
 		 * An array of your y axis fields. Typically this will just be a single
-		 * item unless you need to display grouped or stacked bars.
+		 * item unless you need to display grouped or stacked bars. The order of
+		 * the array determines the series order in the chart.
 		 */
 		yAxisFields: array,
 		/**
@@ -210,6 +239,7 @@ const BarChart = createClass({
 			legend,
 			hasToolTips,
 			hasLegend,
+			palette,
 
 			xAxisField,
 			xAxisFormatter,
@@ -368,6 +398,7 @@ const BarChart = createClass({
 					isStacked={yAxisIsStacked}
 					hasToolTips={hasToolTips}
 					legend={legend}
+					palette={palette}
 				/>
 			</svg>
 		);

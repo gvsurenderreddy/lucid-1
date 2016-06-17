@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import React from 'react';
 import { lucidClassNames } from '../../util/style-helpers';
 import { createClass } from '../../util/component-types';
@@ -34,7 +35,7 @@ const AxisLabel = createClass({
 		 */
 		width: number,
 		/**
-		 * Zero-based color, defaults to -1 which is black.
+		 * Zero-based color.
 		 */
 		color: number,
 		/**
@@ -46,12 +47,6 @@ const AxisLabel = createClass({
 		 * Determine orientation of the label.
 		 */
 		orient: oneOf(['top', 'bottom', 'left', 'right']),
-	},
-
-	getDefaultProps() {
-		return {
-			color: -1,
-		};
 	},
 
 	render() {
@@ -70,7 +65,9 @@ const AxisLabel = createClass({
 		return (
 			<text
 				{...passThroughs}
-				className={cx(className, '&', `&-color-${color % 6}`)}
+				className={cx(className, '&', {
+					[`&-color-chart-${color % 6}`]: !_.isNil(color),
+				})}
 				x={isH ? width / 2 : height / 2 * -1}
 				y={orient === 'right' ? width : orient === 'bottom' ? height : 0}
 				dy={orient === 'top' || orient === 'left' ? '1em' : '-.32em'}

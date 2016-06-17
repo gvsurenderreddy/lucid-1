@@ -141,7 +141,8 @@ const LineChart = createClass({
 
 		/**
 		 * An array of your y axis fields. Typically this will just be a single
-		 * item unless you need to display multiple lines.
+		 * item unless you need to display multiple lines. The order of the array
+		 * determines the series order in the chart.
 		 */
 		yAxisFields: arrayOf(string),
 		/**
@@ -186,7 +187,8 @@ const LineChart = createClass({
 
 		/**
 		 * An array of your y2 axis fields. Typically this will just be a single
-		 * item unless you need to display multiple lines.
+		 * item unless you need to display multiple lines. The order of the array
+		 * determines the series order in the chart.
 		 */
 		y2AxisFields: arrayOf(string),
 		/**

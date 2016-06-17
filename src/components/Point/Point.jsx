@@ -89,9 +89,8 @@ const Point = createClass({
 		} = this.props;
 
 		const kindIndex = kind % 5;
-		const colorIndex = color % 6;
 
-		const classes = cx(className, '&', `&-color-${colorIndex}`, {
+		const classes = cx(className, '&', `&-color-chart-${color % 6}`, {
 			'&-has-stroke': hasStroke,
 		});
 

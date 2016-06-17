@@ -7,6 +7,7 @@ import {
 } from '../../util/chart-helpers';
 import { createClass } from '../../util/component-types';
 import * as d3Scale from 'd3-scale';
+import * as chartConstants from '../../constants/charts';
 
 import Bar from '../Bar/Bar';
 import ToolTip from '../ToolTip/ToolTip';
@@ -21,6 +22,7 @@ const {
 	object,
 	bool,
 	string,
+	oneOfType,
 } = React.PropTypes;
 
 /**
@@ -75,6 +77,33 @@ const Bars = createClass({
 		 * Show tool tips on hover.
 		 */
 		hasToolTips: bool,
+		/**
+		 * Takes one of the palettes exported from `lucid.chartConstants`.
+		 * Available palettes:
+		 *
+		 * - `PALETTE_6` (default)
+		 * - `PALETTE_30`
+		 * - `PALETTE_MONOCHROME_0_5`
+		 * - `PALETTE_MONOCHROME_1_5`
+		 * - `PALETTE_MONOCHROME_2_5`
+		 * - `PALETTE_MONOCHROME_3_5`
+		 * - `PALETTE_MONOCHROME_4_5`
+		 * - `PALETTE_MONOCHROME_5_5`
+		 *
+		 * Alternatively you can pass in an object if you want to map fields to
+		 * `lucid.chartConstants` or custom colors:
+		 *
+		 *     {
+		 *       'imps': COLOR_0,
+		 *       'rev': COLOR_3,
+		 *       'clicks': '#abc123',
+		 *     }
+		 *
+		 */
+		palette: oneOfType([
+			arrayOf(string),
+			object,
+		]),
 
 		/**
 		 * The scale for the x axis. This must be a d3-scale scale.
@@ -127,6 +156,7 @@ const Bars = createClass({
 			yFormatter: _.identity,
 			isStacked: false,
 			colorOffset: 0,
+			palette: chartConstants.PALETTE_6,
 		};
 	},
 
@@ -144,6 +174,7 @@ const Bars = createClass({
 			top,
 			legend,
 			hasToolTips,
+			palette,
 			xScale,
 			xField,
 			xFormatter,
@@ -158,6 +189,8 @@ const Bars = createClass({
 			isHovering,
 			hoveringSeriesIndex,
 		} = this.state;
+
+		const hasPalette = _.isArray(palette);
 
 		// This scale is used for grouped bars
 		const innerXScale = d3Scale.scaleBand()
@@ -201,7 +234,10 @@ const Bars = createClass({
 								y={yScale(end)}
 								height={yScale(start) - yScale(end)}
 								width={isStacked ? xScale.bandwidth() : innerXScale.bandwidth() }
-								color={pointsIndex}
+								color={hasPalette
+									? palette[pointsIndex % palette.length]
+									: palette[yFields[pointsIndex]]
+								}
 							/>
 						))}
 

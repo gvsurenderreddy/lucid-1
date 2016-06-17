@@ -50,12 +50,10 @@ const Line = createClass({
 			...passThroughs,
 		} = this.props;
 
-		const colorIndex = color % 6;
-
 		return (
 			<path
 				{...passThroughs}
-				className={cx(className, '&', `&-color-${colorIndex}`)}
+				className={cx(className, '&', `&-color-chart-${color % 6}`)}
 				d={d}
 			/>
 		);
